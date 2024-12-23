@@ -35,3 +35,28 @@ export const getAllQuery = async (req, res) => {
     });
   }
 };
+
+// Create one equipment
+export const createOneQuery = async (req, res) => {
+  try {
+    const queryObject = req.body;
+    const db = await connectDB();
+    const collection = db.collection(collectionName);
+    const result = await collection.insertOne(queryObject);
+
+    res.status(201).json({
+      success: true,
+      message: 'Query data created successfully',
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create Query data',
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        details: error.message,
+      },
+    });
+  }
+};
