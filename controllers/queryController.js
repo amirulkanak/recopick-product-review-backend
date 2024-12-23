@@ -61,6 +61,38 @@ export const createOneQuery = async (req, res) => {
   }
 };
 
+// Delete one Query data
+export const deleteOneQueryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const db = await connectDB();
+    const collection = db.collection(collectionName);
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      res.status(404).json({
+        success: false,
+        message: 'Query data not found',
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Query data deleted successfully',
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete Query data',
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        details: error.message,
+      },
+    });
+  }
+};
+
 // Get All Query data by user email
 export const getAllQueryByUserEmail = async (req, res) => {
   try {
