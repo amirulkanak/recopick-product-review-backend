@@ -60,3 +60,39 @@ export const createOneQuery = async (req, res) => {
     });
   }
 };
+
+// Get All Query data by user email
+export const getAllQueryByUserEmail = async (req, res) => {
+  try {
+    const { userEmail } = req.params;
+    const db = await connectDB();
+    const collection = db.collection(collectionName);
+    const result = await collection
+      .find({ 'user.email': userEmail })
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    if (result.length === 0) {
+      res.status(200).json({
+        success: true,
+        message: 'No Query data found',
+        result,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Query data retrieved successfully',
+        result,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve Query data',
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        details: error.message,
+      },
+    });
+  }
+};
