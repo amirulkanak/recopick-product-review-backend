@@ -65,7 +65,6 @@ export const createOneQuery = async (req, res) => {
 export const deleteOneQueryById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const db = await connectDB();
     const collection = db.collection(collectionName);
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
