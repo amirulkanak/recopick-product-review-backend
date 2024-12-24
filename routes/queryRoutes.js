@@ -4,6 +4,7 @@ import {
   deleteOneQueryById,
   getAllQuery,
   getAllQueryByUserEmail,
+  getOneQueryById,
   updateOneQueryById,
 } from '../controllers/queryController.js';
 
@@ -12,6 +13,8 @@ const queryRoutes = () => {
 
   // GET all queries - /query/all
   route.get('/all', getAllQuery);
+  // GET one query by ID - /query/:id
+  route.get('/:id', getOneQueryById);
   // Update one query - /query/update/:id
   route.put('/update/:id', updateOneQueryById);
   // Delete one query - /query/delete/:id

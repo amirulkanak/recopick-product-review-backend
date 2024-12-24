@@ -36,6 +36,39 @@ export const getAllQuery = async (req, res) => {
   }
 };
 
+// Get one Query data by ID
+export const getOneQueryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = await connectDB();
+    const collection = db.collection(collectionName);
+    const result = await collection.findOne({ _id: new ObjectId(id) });
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Query data retrieved successfully',
+        result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'Query data not found',
+        result,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve Query data',
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        details: error.message,
+      },
+    });
+  }
+};
+
 // Create one equipment
 export const createOneQuery = async (req, res) => {
   try {
