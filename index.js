@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/database.js';
 import queryRoutes from './routes/queryRoutes.js';
+import recommendationRoutes from './routes/recommendationRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -22,6 +23,8 @@ connectDB();
 
 // Query routes
 app.use('/query', queryRoutes());
+// Recommendation routes
+app.use('/recommendation', recommendationRoutes());
 
 // Default route
 app.get('/', (req, res) => {

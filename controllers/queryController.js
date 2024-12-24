@@ -9,7 +9,7 @@ export const getAllQuery = async (req, res) => {
   try {
     const db = await connectDB();
     const collection = db.collection(collectionName);
-    const result = await collection.find({}).toArray();
+    const result = await collection.find({}).sort({ createdAt: -1 }).toArray();
 
     if (result.length === 0) {
       res.status(200).json({
