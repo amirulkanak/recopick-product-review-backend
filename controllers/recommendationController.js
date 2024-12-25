@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import connectDB from '../config/database.js';
-import increaseRecommendationCount from '../utils/increaseRecommendationCount.js';
+import updateRecommendationCount from '../utils/updateRecommendationCount.js';
 
 // Collection name
 const collectionName = 'recommendations';
@@ -110,7 +110,7 @@ export const getAllRecommendationByRecommenderEmail = async (req, res) => {
 // Post a new Recommendation data
 export const postRecommendation = async (req, res) => {
   // Update queries collection recommendationCount
-  await increaseRecommendationCount(req.body.queryId, 'queries');
+  await updateRecommendationCount(req.body.queryId, 'queries', 'increase');
   try {
     const db = await connectDB();
     const collection = db.collection(collectionName);
@@ -138,6 +138,13 @@ export const deleteOneRecommendationById = async (req, res) => {
   try {
     const db = await connectDB();
     const collection = db.collection(collectionName);
+    // find queryId to update queries collection recommendationCount
+    const queryId = await collection.findOne({
+      _id: new ObjectId(req.params.id),
+    });
+    // Update queries collection recommendationCount
+    await updateRecommendationCount(queryId.queryId, 'queries', 'decrease');
+
     const result = await collection.deleteOne({
       _id: new ObjectId(req.params.id),
     });
