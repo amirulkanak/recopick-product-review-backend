@@ -4,6 +4,7 @@ import {
   getAllRecommendation,
   getAllRecommendationByQueryId,
   getAllRecommendationByRecommenderEmail,
+  getAllRecommendationByUserEmail,
   postRecommendation,
 } from '../controllers/recommendationController.js';
 
@@ -13,8 +14,11 @@ const recommendationRoutes = () => {
   // GET all /recommendation/all
   route.get('/all', getAllRecommendation);
 
+  // GET all /recommendation/all/:userEmail
+  route.get('/forMe/:userEmail', getAllRecommendationByUserEmail);
+
   // Get all Recommendation data by queryId
-  route.get('/all/:queryId', getAllRecommendationByQueryId);
+  route.get('/comments/:queryId', getAllRecommendationByQueryId);
 
   // Get all Recommendation data by recommenderEmail
   route.get(
