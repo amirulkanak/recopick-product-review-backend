@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import connectDB from '../config/database.js';
 import increaseRecommendationCount from '../utils/increaseRecommendationCount.js';
 
@@ -73,7 +74,6 @@ export const getAllRecommendationByQueryId = async (req, res) => {
 // get all Recommendation data by recommenderEmail
 export const getAllRecommendationByRecommenderEmail = async (req, res) => {
   try {
-    console.log(req.params.email);
     const db = await connectDB();
     const collection = db.collection(collectionName);
     const result = await collection
@@ -125,6 +125,40 @@ export const postRecommendation = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to post Recommendation data',
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        details: error.message,
+      },
+    });
+  }
+};
+
+// Delete a Recommendation data by id
+export const deleteOneRecommendationById = async (req, res) => {
+  try {
+    const db = await connectDB();
+    const collection = db.collection(collectionName);
+    const result = await collection.deleteOne({
+      _id: new ObjectId(req.params.id),
+    });
+
+    if (result.deletedCount === 0) {
+      res.status(404).json({
+        success: false,
+        message: 'Recommendation data not found',
+        result,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Recommendation data deleted successfully',
+        result,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete Recommendation data',
       error: {
         code: 'INTERNAL_SERVER_ERROR',
         details: error.message,

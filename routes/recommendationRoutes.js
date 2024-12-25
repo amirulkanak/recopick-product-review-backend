@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  deleteOneRecommendationById,
   getAllRecommendation,
   getAllRecommendationByQueryId,
   getAllRecommendationByRecommenderEmail,
@@ -23,6 +24,9 @@ const recommendationRoutes = () => {
 
   // POST one /recommendation/create
   route.post('/create', postRecommendation);
+
+  // DELETE one /recommendation/delete/:id
+  route.delete('/delete/:id', deleteOneRecommendationById);
 
   return route;
 };
