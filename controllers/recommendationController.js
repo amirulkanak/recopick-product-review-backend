@@ -70,6 +70,43 @@ export const getAllRecommendationByQueryId = async (req, res) => {
   }
 };
 
+// get all Recommendation data by recommenderEmail
+export const getAllRecommendationByRecommenderEmail = async (req, res) => {
+  try {
+    console.log(req.params.email);
+    const db = await connectDB();
+    const collection = db.collection(collectionName);
+    const result = await collection
+      .find({
+        recommenderEmail: req.params.email,
+      })
+      .sort({ createdAt: -1 })
+      .toArray();
+    if (result.length === 0) {
+      res.status(200).json({
+        success: true,
+        message: 'No Recommendation data found',
+        result,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Recommendation data retrieved successfully',
+        result,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve Recommendation data',
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        details: error.message,
+      },
+    });
+  }
+};
+
 // Post a new Recommendation data
 export const postRecommendation = async (req, res) => {
   // Update queries collection recommendationCount

@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getAllRecommendation,
   getAllRecommendationByQueryId,
+  getAllRecommendationByRecommenderEmail,
   postRecommendation,
 } from '../controllers/recommendationController.js';
 
@@ -13,6 +14,12 @@ const recommendationRoutes = () => {
 
   // Get all Recommendation data by queryId
   route.get('/all/:queryId', getAllRecommendationByQueryId);
+
+  // Get all Recommendation data by recommenderEmail
+  route.get(
+    '/myRecommendations/:email',
+    getAllRecommendationByRecommenderEmail
+  );
 
   // POST one /recommendation/create
   route.post('/create', postRecommendation);
