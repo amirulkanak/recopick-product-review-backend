@@ -7,6 +7,7 @@ import {
   getAllRecommendationByUserEmail,
   postRecommendation,
 } from '../controllers/recommendationController.js';
+import verifyJWTokenMiddleware from '../middleware/verifyJWTokenMiddleware.js';
 
 const recommendationRoutes = () => {
   const route = express.Router();
@@ -15,7 +16,11 @@ const recommendationRoutes = () => {
   route.get('/all', getAllRecommendation);
 
   // GET all /recommendation/all/:userEmail
-  route.get('/forMe/:userEmail', getAllRecommendationByUserEmail);
+  route.get(
+    '/forMe/:userEmail',
+    verifyJWTokenMiddleware,
+    getAllRecommendationByUserEmail
+  );
 
   // Get all Recommendation data by queryId
   route.get('/comments/:queryId', getAllRecommendationByQueryId);
@@ -23,6 +28,7 @@ const recommendationRoutes = () => {
   // Get all Recommendation data by recommenderEmail
   route.get(
     '/myRecommendations/:email',
+    verifyJWTokenMiddleware,
     getAllRecommendationByRecommenderEmail
   );
 

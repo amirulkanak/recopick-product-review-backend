@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/database.js';
 import queryRoutes from './routes/queryRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -13,13 +14,17 @@ dotenv.config();
 const app = express();
 
 // Middleware
-// { origin: process.env.FRONTEND_URL, credentials: true }
-app.use(cors());
+const allowedOrigins = process.env.FRONTEND_URL.split(',');
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
 // Connect to database
 connectDB();
+
+// Auth routes
+app.use('/auth', authRoutes());
 
 // Query routes
 app.use('/query', queryRoutes());

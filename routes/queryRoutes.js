@@ -7,6 +7,7 @@ import {
   getOneQueryById,
   updateOneQueryById,
 } from '../controllers/queryController.js';
+import verifyJWTokenMiddleware from '../middleware/verifyJWTokenMiddleware.js';
 
 const queryRoutes = () => {
   const route = express.Router();
@@ -19,8 +20,12 @@ const queryRoutes = () => {
   route.put('/update/:id', updateOneQueryById);
   // Delete one query - /query/delete/:id
   route.delete('/delete/:id', deleteOneQueryById);
-  // GET all queries by user email - /query/user/:userEmail
-  route.get('/user/:userEmail', getAllQueryByUserEmail);
+  // GET all queries by user email via JWT verify - /query/user/:userEmail
+  route.get(
+    '/user/:userEmail',
+    verifyJWTokenMiddleware,
+    getAllQueryByUserEmail
+  );
   // POST one query - /query/create
   route.post('/create', createOneQuery);
 

@@ -165,6 +165,11 @@ export const deleteOneQueryById = async (req, res) => {
 export const getAllQueryByUserEmail = async (req, res) => {
   try {
     const { userEmail } = req.params;
+
+    // Check if the user email in the token is the same as the requested user email
+    if (req.user.email !== userEmail) {
+      return res.status(403).send({ message: 'forbidden access' });
+    }
     const db = await connectDB();
     const collection = db.collection(collectionName);
     const result = await collection

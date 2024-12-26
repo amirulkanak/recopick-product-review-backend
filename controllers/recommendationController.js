@@ -40,11 +40,16 @@ export const getAllRecommendation = async (req, res) => {
 // Get all Recommendation data userEmail
 export const getAllRecommendationByUserEmail = async (req, res) => {
   try {
+    const userEmail = req.params.userEmail;
+    // Check if the user email in the token is the same as the requested user email
+    if (req.user.email !== userEmail) {
+      return res.status(403).send({ message: 'forbidden access' });
+    }
     const db = await connectDB();
     const collection = db.collection(collectionName);
     const result = await collection
       .find({
-        userEmail: req.params.userEmail,
+        userEmail: userEmail,
       })
       .sort({ createdAt: -1 })
       .toArray();
@@ -110,11 +115,16 @@ export const getAllRecommendationByQueryId = async (req, res) => {
 // get all Recommendation data by recommenderEmail
 export const getAllRecommendationByRecommenderEmail = async (req, res) => {
   try {
+    const userEmail = req.params.email;
+    // Check if the user email in the token is the same as the requested user email
+    if (req.user.email !== userEmail) {
+      return res.status(403).send({ message: 'forbidden access' });
+    }
     const db = await connectDB();
     const collection = db.collection(collectionName);
     const result = await collection
       .find({
-        recommenderEmail: req.params.email,
+        recommenderEmail: userEmail,
       })
       .sort({ createdAt: -1 })
       .toArray();
